@@ -3511,9 +3511,14 @@ class URDF(URDFType):
 
         node_map = {}
         scene = pyrender.Scene()
-        for tm in fk:
+        for i, tm in enumerate(fk):
             pose = fk[tm]
-            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False)
+            material = pyrender.MetallicRoughnessMaterial(
+                alphaMode='BLEND',
+                baseColorFactor=list(self.links[i].visuals[0].material.color),
+                metallicFactor=0.2,
+                roughnessFactor=0.8)
+            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
             node = scene.add(mesh, pose=pose)
             node_map[tm] = node
 
@@ -3567,9 +3572,14 @@ class URDF(URDFType):
             fk = self.visual_trimesh_fk(cfg=cfg)
 
         scene = pyrender.Scene()
-        for tm in fk:
+        for i, tm in enumerate(fk):
             pose = fk[tm]
-            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False)
+            material = pyrender.MetallicRoughnessMaterial(
+                    alphaMode='BLEND',
+                    baseColorFactor=list(self.links[i].visuals[0].material.color),
+                    metallicFactor=0.2,
+                    roughnessFactor=0.8)
+            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
             scene.add(mesh, pose=pose)
         pyrender.Viewer(scene, use_raymond_lighting=True)
 
