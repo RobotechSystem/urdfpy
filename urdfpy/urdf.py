@@ -3513,12 +3513,15 @@ class URDF(URDFType):
         scene = pyrender.Scene()
         for i, tm in enumerate(fk):
             pose = fk[tm]
-            material = pyrender.MetallicRoughnessMaterial(
-                alphaMode='BLEND',
-                baseColorFactor=list(self.links[i].visuals[0].material.color),
-                metallicFactor=0.2,
-                roughnessFactor=0.8)
-            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
+            try:
+                material = pyrender.MetallicRoughnessMaterial(
+                    alphaMode='BLEND',
+                    baseColorFactor=list(self.links[i].visuals[0].material.color),
+                    metallicFactor=0.2,
+                    roughnessFactor=0.8)
+                mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
+            except:
+                mesh = pyrender.Mesh.from_trimesh(tm, smooth=False)
             node = scene.add(mesh, pose=pose)
             node_map[tm] = node
 
@@ -3574,12 +3577,15 @@ class URDF(URDFType):
         scene = pyrender.Scene()
         for i, tm in enumerate(fk):
             pose = fk[tm]
-            material = pyrender.MetallicRoughnessMaterial(
-                    alphaMode='BLEND',
-                    baseColorFactor=list(self.links[i].visuals[0].material.color),
-                    metallicFactor=0.2,
-                    roughnessFactor=0.8)
-            mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
+            try:
+                material = pyrender.MetallicRoughnessMaterial(
+                        alphaMode='BLEND',
+                        baseColorFactor=list(self.links[i].visuals[0].material.color),
+                        metallicFactor=0.2,
+                        roughnessFactor=0.8)
+                mesh = pyrender.Mesh.from_trimesh(tm, smooth=False, material=material)
+            except:
+                mesh = pyrender.Mesh.from_trimesh(tm, smooth=False)
             scene.add(mesh, pose=pose)
         pyrender.Viewer(scene, use_raymond_lighting=True)
 
